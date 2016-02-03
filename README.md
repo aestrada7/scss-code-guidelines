@@ -4,7 +4,7 @@ _These guidelines are written with Zurb Foundation in mind, but are good practic
 2. [Naming](#naming)
 3. [Rules](#rules)
 4. [Scoping](#scoping)
-5. [Browser Specific Rules](#browser-specific-rules)
+5. [Vendor Specific Rules](#vendor-specific-rules)
 6. [Right To Left](#right-to-left)
 7. [Variables](#variables)
 8. [Commenting](#commenting)
@@ -124,13 +124,146 @@ A case where you might consider breaking away from the modular style would be wh
 }
 ```
 
-###<a name="browser-specific-rules"></a>5. Browser Specific Rules
+###<a name="vendor-specific-rules"></a>5. Vendor Specific Rules
+It's recommended to use Autoprefixer, a plugin that parses the CSS and adds specific vendor prefixes to the rules and values. If it's not used, vendor specific rules need to be added, this is easier done creating mixins to handle it. An example:
+
+```css
+@mixin display-flex() {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+@mixin flex-justify-content($justify-content) {
+  -webkit-justify-content: $justify-content;
+  -ms-justify-content: $justify-content;
+  justify-content: $justify-content;
+}
+
+.some-element {
+  @include display-flex();
+  @include flex-justify-content(center);
+}
+
+//output
+.some-element {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+```
+
+Avoid writing vendor specific rules manually, it can lead to unforseen issues.
 
 ###<a name="right-to-left"></a>6. Right To Left
+Only applicable for Zurb Foundation.
+
+* Be sure to use the `$default‐float` and `$opposite‐direction` variables when applying left/right values that need to be reversed for RTL.
+* This must be used on the following properties: `float`, `text‐align` as well as any others that use `left` or `right` as a value.
+* Replace properties that use a `‐left` or `‐right` modifier with the variables. (`margin‐right`, `border‐right`, `padding‐right`, etc.)
+* Avoid using shorthand values if they don't translate well in right-to-left. Example, don't use `padding: rem-calc(5, 10, 20, 30);`, use `padding: rem-calc(5, 10, 20);` and `padding-#{$default-float}: rem-calc(30);`
+
+```css
+.element {
+  margin‐#{$default‐float}: rem‐calc(5);
+}
+
+.element‐container {
+  float: $opposite‐direction;
+  text‐align: $default‐float;
+}
+
+// output
+.element {
+  margin‐left: 0.3125rem;
+}
+
+.element‐container {
+  float: right;
+}
+```
 
 ###<a name="variables"></a>7. Variables
+Always prefer the use of SCSS variables instead of typing the values all the time. It's easier to refactor later on. Most Front End frameworks like Foundation or Bootstrap come bundled with variables. Also, create variables when a certain value will be repeated, here are some examples of common variables.
+
+```css
+$global-milliseconds: 300ms;
+$global-easing: ease-in;
+
+$background-color-inverse: #fff;
+$background-color-normal: #ccc;
+$background-color-dark: #222;
+
+$font-size-large: rem-calc(18);
+$font-size-lead: rem-calc(14);
+$font-size-small: rem-calc(10);
+
+$text-color: #222;
+$text-color-inverse: #eee;
+
+$weight-light: 300;
+$weight-normal: 500;
+$weight-semi-bold: 700;
+$weight-bold: 900;
+```
+
+* Use the `$background‐x` variables when setting a `background‐color`.
+* Use the `$font‐size‐x` variables when setting a `font‐size`.
+* Use the `$text‐color‐x` variables when setting a `color`.
+* Use the `$weight‐x` variables when setting a `font‐weight`.
+
+```css
+.element {
+  transition: all $global-milliseconds $global-easing;
+  background-color: $background-color-normal;
+  color: $text-color;
+  font-size: $font-size-lead;
+  font-weight: $weight-semi-bold;
+}
+```
 
 ###<a name="commenting"></a>8. Commenting
+
+* Comment frequently.
+* Use a table of contents for large files with indexes mixed with appropriate section titles.
+* Comments about selectors live right above the selector.
+* Comments about an attribute resides on the same line as the attribute.
+* Comments that separate a subsection will have an index and a short description on a single line.
+
+```css
+/**
+ * Table of Contents
+ *
+ * 1.0 ‐ Reset
+ * 2.0 ‐ Genericons
+ * 3.0 ‐ Typography
+ * 4.0 ‐ Elements
+*/
+
+/**
+ * #.# Section title
+ *
+ * Description of section, whether or not it has media queries, etc.
+ */
+
+.selector {
+  float: #{$default‐float};
+}
+
+// This is a comment about this selector
+.another‐selector {
+  position: absolute;
+  top: 0 !important; // I should explain why this is so !important
+}
+
+// #.# This is a comment about this sub‐section
+.a‐different‐selector {
+  position: relative;
+}
+```
 
 ###<a name="mixins"></a>9. Mixins
 
