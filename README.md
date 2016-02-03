@@ -17,6 +17,7 @@ _These guidelines are written with Zurb Foundation in mind, but are good practic
 * Indent all block content - rules within rules - as well as declarations, so to reflect hierarchy and improve understanding.
 * Always use a single space between the last selector and the opening brace (but no space after the brace) that begins the declaration block.
 * The opening brace should be on the same line as the last selector in a given rule. Always put a blank line between rules.
+* Use two spaces as indentation (not tabs) so it displays uniformly across platforms.
 
 ```css
 .element‐card {
@@ -94,8 +95,8 @@ When writing SCSS styles, use scoping to avoid potential conflicts with classes 
 }
 
 /*
-* Global component
-*/
+ * Global component
+ */
 .panel {
   padding: rem‐calc(10);
 }
@@ -103,7 +104,7 @@ When writing SCSS styles, use scoping to avoid potential conflicts with classes 
 
 Following the above scoping practices will lead to organized, self contained, modular code that's easier to move and maintain.
 
-A case where you might consider breaking away from the modular style would be when handling keyframe animations. `@keyframes` are required to be placed at the root of your document — which would conflict with the scoping practices. You can still do this using the @at‐root directive within SCSS. In the following example the `@keyframes` will be placed at the same level as `.color‐swap`.
+A case where you might consider breaking away from the modular style would be when handling keyframe animations. `@keyframes` are required to be placed at the root of your document — which would conflict with the scoping practices. You can still do this using the `@at‐root` directive within SCSS. In the following example the `@keyframes` will be placed at the same level as `.color‐swap`.
 
 ```css
 .color‐swap {
@@ -187,7 +188,7 @@ Only applicable for Zurb Foundation.
 ```
 
 ###<a name="variables"></a>7. Variables
-Always prefer the use of SCSS variables instead of typing the values all the time. It's easier to refactor later on. Most Front End frameworks like Foundation or Bootstrap come bundled with variables. Also, create variables when a certain value will be repeated, here are some examples of common variables.
+Always prefer the use of SCSS variables instead of typing the values all the time. It's easier to refactor later on. Most front-end frameworks like Foundation or Bootstrap come bundled with variables so try to use them. Also, create variables when a certain value will be repeated, here are some examples of common variables.
 
 ```css
 $global-milliseconds: 300ms;
@@ -279,3 +280,5 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 ```
+
+_To be constantly updated_
