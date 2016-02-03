@@ -2,14 +2,15 @@ _These guidelines are written with Zurb Foundation in mind, but are good practic
 
 1. [Formatting](#formatting)
 2. [Naming](#naming)
-3. [Rules](#rules)
-4. [Scoping](#scoping)
-5. [Vendor Specific Rules](#vendor-specific-rules)
-6. [Right To Left](#right-to-left)
-7. [Variables](#variables)
-8. [Commenting](#commenting)
+3. [Architecture](#architecture)
+4. [Rules](#rules)
+5. [Scoping](#scoping)
+6. [Vendor Specific Rules](#vendor-specific-rules)
+7. [Right To Left](#right-to-left)
+8. [Variables](#variables)
+9. [Commenting](#commenting)
 9. [Mixins](#mixins)
-10. [Headings](#headings)
+9. [Headings](#headings)
 
 ###<a name="formatting"></a>1. Formatting
 * Always use a single space between property and value (but no space between property and colon) for consistency reasons.
@@ -18,6 +19,7 @@ _These guidelines are written with Zurb Foundation in mind, but are good practic
 * Always use a single space between the last selector and the opening brace (but no space after the brace) that begins the declaration block.
 * The opening brace should be on the same line as the last selector in a given rule. Always put a blank line between rules.
 * Use two spaces as indentation (not tabs) so it displays uniformly across platforms.
+* Make sure there are no extra spaces at the end of lines.
 
 ```css
 .element‐card {
@@ -62,7 +64,31 @@ _These guidelines are written with Zurb Foundation in mind, but are good practic
 }
 ```
 
-###<a name="rules"></a>3. Rules
+###<a name="architecture"></a>3. Architecture
+It's mainly dependant on the architecture defined by every individual project, but it's a good idea to separate everything in small files, a separation of concerns between them.
+
+An example is shown here:
+
+```
+|app/
+|‐‐ components/
+|   |‐‐ directives/
+|      |‐‐ directive‐name/
+|          |‐‐ _directive‐name.scss
+|
+|‐‐ features/
+|   |‐‐ feature‐name/
+|       |‐‐ _feature‐name.scss
+|
+|‐‐ styles/
+|   |-- main/
+|       |-- _mixins.scss
+|       |-- _variables.scss
+|   |‐‐ components/
+|       |-- _component-name.scss
+```
+
+###<a name="rules"></a>4. Rules
 Use the built in `rem-calc()` function in place of `px` values. This applies to all pixel values except visual properties such as `border-width`, `box-shadow`, `text-shadow`, `border-radius`, etc.
 
 ```css
@@ -78,7 +104,7 @@ Use the built in `rem-calc()` function in place of `px` values. This applies to 
 }
 ```
 
-###<a name="scoping"></a>4. Scoping
+###<a name="scoping"></a>5. Scoping
 When writing SCSS styles, use scoping to avoid potential conflicts with classes that share the same name. In the example below, `.base-courses` and `.base-messages` use panels slightly different than how it is defined globally. Without proper scoping, the `.panel` would be overridden.
 
 ```css
@@ -125,7 +151,7 @@ A case where you might consider breaking away from the modular style would be wh
 }
 ```
 
-###<a name="vendor-specific-rules"></a>5. Vendor Specific Rules
+###<a name="vendor-specific-rules"></a>6. Vendor Specific Rules
 It's recommended to use Autoprefixer, a plugin that parses the CSS and adds specific vendor prefixes to the rules and values. If it's not used, vendor specific rules need to be added, this is easier done creating mixins to handle it. An example:
 
 ```css
@@ -159,7 +185,7 @@ It's recommended to use Autoprefixer, a plugin that parses the CSS and adds spec
 
 Avoid writing vendor specific rules manually, it can lead to unforseen issues.
 
-###<a name="right-to-left"></a>6. Right To Left
+###<a name="right-to-left"></a>7. Right To Left
 Only applicable for Zurb Foundation.
 
 * Be sure to use the `$default‐float` and `$opposite‐direction` variables when applying left/right values that need to be reversed for RTL.
@@ -187,7 +213,7 @@ Only applicable for Zurb Foundation.
 }
 ```
 
-###<a name="variables"></a>7. Variables
+###<a name="variables"></a>8. Variables
 Always prefer the use of SCSS variables instead of typing the values all the time. It's easier to refactor later on. Most front-end frameworks like Foundation or Bootstrap come bundled with variables so try to use them. Also, create variables when a certain value will be repeated, here are some examples of common variables.
 
 ```css
@@ -226,7 +252,7 @@ $weight-bold: 900;
 }
 ```
 
-###<a name="commenting"></a>8. Commenting
+###<a name="commenting"></a>9. Commenting
 
 * Comment frequently.
 * Use a table of contents for large files with indexes mixed with appropriate section titles.
@@ -266,9 +292,28 @@ $weight-bold: 900;
 }
 ```
 
-###<a name="mixins"></a>9. Mixins
+###<a name="mixins"></a>10. Mixins
+Use mixins whenever a certain set of rules is needed in many different places. Don't create mixins for everything, otherwise the flow of the document will be broken. The use of mixins also increases legibility and code extensibility, since changing the mixin will update every rule that uses it instead of doing it manually.
 
-###<a name="headings"></a>10. Headings
+```css
+/*
+ * Truncates a given word by adding an ellipsis prior to truncating.
+ * e.g. "This is getting trunc..."
+ */
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+  word-wrap: nowrap !important;
+}
+
+.some-element {
+  width: rem-calc(150);
+  @include ellipsis();
+}
+```
+
+###<a name="headings"></a>11. Headings
 Each application layer that is opened (like a panel or modal) needs to start it's headings with ```<h1>```. This way screen reader users will have a clear understanding of where they are on the application.
 Heading tags should only be used to communicate their level of importance to screenreader and not to apply styles. To apply styles to a heading tag you should create a class that applies regardless of heading level.
 
@@ -281,4 +326,4 @@ h1, h2, h3, h4, h5, h6 {
 }
 ```
 
-_To be constantly updated_
+_To be continuously updated..._
